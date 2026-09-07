@@ -3,51 +3,20 @@
 
 A role-based web application that connects hostel mess kitchens with nearby NGOs — turning leftover food into meals for communities in need.
 
+> **Live Demo:** *(deploy link here)*
+> **Previous version (HTML/CSS/JS):** [Food-Waste-Management-System](https://github.com/sakshi-walunjkar/Food-Waste-Management-System-)
+
 ---
 
 ## What It Does
 
 Hostel messes produce significant food waste daily. ZeroWasteMess creates a structured supply chain:
 
-1. **Mess staff** logs leftover food with quantity, condition, and meal type
+1. **Mess staff** logs leftover food (single or multiple items at once) with quantity, condition, and meal type
 2. **NGOs** browse available food and submit pickup requests
 3. **Admin** approves requests, assigns collection and delivery staff
-4. **Delivery staff** collects from the mess and delivers to the NGO
+4. **Delivery staff** accepts/declines tasks, collects from the mess, and delivers to the NGO
 5. **Everyone** tracks the delivery in real time and sees impact stats
-
----
-
-## Role System
-
-| Role | What They Can Do |
-|------|-----------------|
-| **Admin** | Full dashboard — manage workflow, approve NGO requests, assign staff, live tracking |
-| **Mess Staff** | Log leftover food entries, view their own entry history and timeline |
-| **NGO** | Browse available food, submit requests, view incoming deliveries, notifications |
-| **Delivery Staff** | View assigned collection and delivery tasks, mark them complete |
-
----
-
-## Features
-
-### Core Workflow
-- **Food Entry Form** — 3-step wizard: meal type → food details → review & submit
-- **Admin Workflow Pipeline** — Pending Collection → Collection Assigned → Collected → In Transit → Delivered
-- **NGO Request System** — NGOs request food; admin approves and assigns delivery staff
-- **Live Delivery Tracking** — Progress bar, ETA, route history, status steps
-- **Notification System** — NGOs notified on new food; bell dropdown with mark-all-read
-
-### Dashboards
-- **Admin** — Stats overview, workflow management, NGO requests, live tracking, staff directory
-- **Mess Staff** — Personal food log, inline entry form, 4-step delivery timeline per entry
-- **NGO** — Available food with request button (deduped), active deliveries, completion history
-- **Delivery Staff** — Collection tasks (amber), delivery tasks (blue), completed history
-
-### Public Pages
-- **Hero** — Live stats (kg saved, active NGOs, meals delivered) computed from real data
-- **Impact Stats** — Animated counters for food saved, NGO count, meals served, total entries
-- **Kanban Dashboard** — 4-column pipeline: Pending / Collected / In Transit / Delivered
-- **NGO Directory** — Partner cards with computed avg rating, contact links, distance
 
 ---
 
@@ -58,9 +27,64 @@ Hostel messes produce significant food waste daily. ZeroWasteMess creates a stru
 | Frontend | React 18, Vite 7 |
 | Styling | Custom CSS, Plus Jakarta Sans, Inter (Google Fonts) |
 | Icons | Lucide React |
-| State | React useState + localStorage (no external state library) |
+| State | React `useState` + `localStorage` (no external state library) |
 | Backend | Node.js, Express.js |
 | Database | MongoDB, Mongoose |
+
+> The frontend runs **fully without the backend** — it uses `localStorage` as the database. The backend (MongoDB) is scaffolded and ready to connect.
+
+---
+
+## Role System
+
+| Role | Credentials | What They Can Do |
+|------|-------------|-----------------|
+| **Admin** | `admin@hostel.com` / `admin123` | Full dashboard — manage workflow, approve NGO requests, assign staff, live tracking, roadmap |
+| **Mess Staff** | `mess1@hostel.com` / `mess123` | Log single or multiple food entries, cancel own pending entries, view 5-step delivery timeline |
+| **NGO** | `ngo1@ngo.org` / `ngo123` | Browse available food, submit requests, confirm receipt, cancel own pending requests |
+| **Delivery Staff** | `delivery1@hostel.com` / `delivery123` | Accept/decline assigned tasks, report issues, mark collection & delivery complete |
+
+> 10 accounts exist for each role (mess1–mess10, ngo1–ngo10, delivery1–delivery10).
+
+---
+
+## Features
+
+### Core Workflow
+- **Batch Food Entry** — Log multiple food items in one submission (Add Another Item)
+- **Admin Workflow Pipeline** — `Pending Collection → Collection Assigned → Collected → In Transit → Delivered`
+- **NGO Request System** — NGOs request food; admin approves and assigns delivery staff
+- **Live Delivery Tracking** — Progress bar, ETA, route history, status steps
+- **Notification System** — NGOs notified on new food; bell dropdown with mark-all-read
+
+### Dashboards
+
+**Admin**
+- Animated stat counters, pipeline bar, activity feed
+- 6 tabs: Overview · Workflow · NGO Requests · Live Tracking · Staff & Users · 🚀 Roadmap
+- Workflow cards with dropdowns to assign staff and advance status
+
+**Mess Staff**
+- Log single or multiple food items at once
+- 5-step delivery timeline per entry (Pending → Collection Assigned → Collected → In Transit → Delivered)
+- Cancel own entries (only while `Pending Collection`)
+- Permission notice showing what actions are allowed
+
+**NGO**
+- Available food with freshness timers (🟢 Fresh / 🟡 Good / 🟠 Fair)
+- Request food, cancel own pending requests, confirm receipt on delivery
+- Request history and notification bell
+
+**Delivery Staff**
+- Accept / Decline tasks with reason modal
+- Report issues mid-delivery
+- Route visual animation, completed history
+
+### Public Pages
+- **Hero** — Live stats (kg saved, active NGOs, meals delivered) from real data
+- **Impact Stats** — Animated counters for food saved, NGO count, meals served, total entries
+- **Kanban Dashboard** — 4-column pipeline: Pending / Collected / In Transit / Delivered
+- **NGO Directory** — Partner cards with computed avg rating, contact links, distance
 
 ---
 
@@ -73,7 +97,7 @@ hostel-food-waste/
 │   ├── components/
 │   │   ├── Navbar.jsx / .css        # Fixed nav, role-aware links, user chip
 │   │   ├── Hero.jsx / .css          # Landing hero with live stats
-│   │   ├── Dashboard.jsx / .css     # 4-column Kanban pipeline + How It Works
+│   │   ├── Dashboard.jsx / .css     # 4-column Kanban pipeline
 │   │   ├── ImpactStats.jsx / .css   # Animated counters, bar chart
 │   │   ├── FoodLog.jsx / .css       # Searchable table with status filter
 │   │   ├── NGOList.jsx / .css       # NGO directory with computed stats
@@ -81,9 +105,9 @@ hostel-food-waste/
 │   │   └── Footer.jsx / .css
 │   │
 │   ├── pages/
-│   │   ├── Login.jsx / .css         # Two-panel login with clickable demo table
+│   │   ├── Login.jsx / .css         # 4 role tabs, user cards with auto-fill
 │   │   ├── AdminDashboard.jsx       # Full supply chain control center
-│   │   ├── MessDashboard.jsx        # Mess staff food logging
+│   │   ├── MessDashboard.jsx        # Mess staff food logging (batch support)
 │   │   ├── NGODashboard.jsx         # NGO request and delivery view
 │   │   ├── DeliveryDashboard.jsx    # Driver task management
 │   │   └── FoodEntry.jsx / .css     # 3-step food entry wizard
@@ -92,7 +116,8 @@ hostel-food-waste/
 │   │   └── database.js              # All localStorage CRUD services
 │   │
 │   ├── constants/
-│   │   └── status.js                # Single source of truth for status strings
+│   │   ├── status.js                # Single source of truth for status strings
+│   │   └── permissions.js           # Role-based permission map + can() helper
 │   │
 │   ├── data/
 │   │   └── database.json            # Seed data (users, food, NGOs, tracking)
@@ -125,10 +150,12 @@ hostel-food-waste/
 
 ### Prerequisites
 - Node.js 18+
-- npm or yarn
+- npm
 
 ### Frontend
 ```bash
+git clone https://github.com/sakshi-walunjkar/Food-Waste-Management-System-.git
+cd hostel-food-waste
 npm install
 npm run dev
 ```
@@ -148,6 +175,19 @@ API runs at **http://localhost:5000**
 
 ---
 
+## Demo Credentials
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@hostel.com` | `admin123` |
+| Mess Staff | `mess1@hostel.com` | `mess123` |
+| NGO | `ngo1@ngo.org` | `ngo123` |
+| Delivery | `delivery1@hostel.com` | `delivery123` |
+
+> You can also click any user card on the login page to auto-fill credentials.
+
+---
+
 ## API Reference
 
 | Method | Endpoint | Description |
@@ -162,9 +202,7 @@ API runs at **http://localhost:5000**
 
 ---
 
-## Development Guide
-
-### Data Flow
+## Data Flow
 
 The frontend is fully decoupled from the backend. All reads and writes go through `src/services/database.js`, which wraps localStorage.
 
@@ -172,110 +210,31 @@ The frontend is fully decoupled from the backend. All reads and writes go throug
 Component → service function (database.js) → localStorage → JSON.parse/stringify
 ```
 
-The backend (`/backend`) exposes a REST API connected to MongoDB but is **not called by the frontend yet**. When ready, replace the service functions in `database.js` with `fetch` calls to the API.
-
----
-
 ### Service Layer
-
-All data access goes through named service objects — never read localStorage directly in components.
 
 | Service | Key Functions |
 |---------|---------------|
 | `foodService` | `getAll()`, `getById(id)`, `create(entry)`, `updateStatus(id, status)`, `delete(id)` |
 | `ngoService` | `getAll()`, `getById(id)`, `update(id, data)` |
 | `userService` | `getAll()`, `getByEmail(email)` |
-| `workflowService` | `assignCollection(foodId, staffId)`, `markCollected(foodId)`, `assignDelivery(foodId, staffId, ngoId)`, `markDelivered(foodId)` |
+| `workflowService` | `assignCollection`, `markCollected`, `assignDelivery`, `markDelivered`, `cancelOwnEntry`, `declineTask`, `confirmReceipt` |
 | `notificationService` | `notifyNGOs(foodEntry)`, `getForNGO(ngoId)`, `markAllRead(ngoId)` |
 | `trackingService` | `getByFoodId(foodId)`, `addCheckpoint(foodId, coords)` |
 | `statsService` | `getStats()` |
 
----
-
-### Seed Data & DB Reset
-
-Seed data lives in `src/data/database.json`. On first load (or after a version bump), `database.js` writes this into localStorage.
-
-To reset all data back to seed:
-1. Bump `DB_VERSION` in `src/services/database.js` (e.g. `'1.1.0'` → `'1.2.0'`)
-2. Reload the app — localStorage is wiped and re-seeded automatically
-
-To add new seed users, NGOs, or food entries, edit `src/data/database.json` and bump the version.
-
----
-
 ### Status Flow
-
-All status strings are defined in `src/constants/status.js`. Never use raw strings.
 
 ```
 PENDING_COLLECTION → COLLECTION_ASSIGNED → COLLECTED → IN_TRANSIT → DELIVERED
 ```
 
-```js
-import { STATUS, PENDING_STATUSES } from '../constants/status';
-```
+All status strings are defined in `src/constants/status.js`. Never use raw strings in components.
 
-`PENDING_STATUSES` is an array of the first two statuses — used to filter entries that haven't been collected yet.
+### Seed Data & Reset
 
----
-
-### Adding a New Role
-
-1. Add the user to `src/data/database.json` with a `role` field
-2. Add a route case in `src/App.jsx` inside the role-based render block
-3. Add nav links to the `ROLE_LINKS` map in `src/components/Navbar.jsx`
-4. Create `src/pages/YourRoleDashboard.jsx`
-5. Bump `DB_VERSION` to re-seed
-
----
-
-### Adding a New Food Status
-
-1. Add the constant to `src/constants/status.js`
-2. Add a column to the Kanban in `src/components/Dashboard.jsx` (update the `COLS` array)
-3. Add a `col-header-*` CSS class in `src/styles/Dashboard.css`
-4. Add the transition logic in `src/services/database.js` under `workflowService`
-
----
-
-### Connecting Frontend to Backend
-
-The backend API is ready at `http://localhost:5000/api`. To wire it up:
-
-1. Create a `.env` file in the project root:
-   ```env
-   VITE_API_URL=http://localhost:5000/api
-   ```
-2. In `src/services/database.js`, replace service functions with `fetch` calls:
-   ```js
-   // Before (localStorage)
-   getAll: () => getStore('food')
-
-   // After (API)
-   getAll: async () => {
-     const res = await fetch(`${import.meta.env.VITE_API_URL}/food`);
-     return res.json();
-   }
-   ```
-3. Update all components that call these services to handle the returned Promise (add `async/await` or `.then()`)
-
----
-
-### Useful Scripts
-
-```bash
-npm run dev        # Start dev server at localhost:5173
-npm run build      # Production build → dist/
-npm run preview    # Preview production build locally
-```
-
-Backend:
-```bash
-cd backend
-npm run dev        # nodemon — auto-restarts on file change
-npm start          # Plain node server.js
-```
+To reset all data back to seed:
+1. Bump `DB_VERSION` in `src/services/database.js` (e.g. `'2.1.0'` → `'2.2.0'`)
+2. Reload the app — localStorage is wiped and re-seeded automatically
 
 ---
 
@@ -288,42 +247,66 @@ VITE_API_URL=http://localhost:5000/api
 
 ### Backend (`.env` in `/backend`)
 ```env
-MONGO_URI=mongodb+srv://user:password@cluster.mongodb.net/foodwaste
+MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/foodwaste
 PORT=5000
 JWT_SECRET=replace_with_a_long_random_string
 ```
 
 ---
 
+## Connecting Frontend to Backend
+
+The backend API is ready. To wire it up:
+
+1. Create `.env` in the project root with `VITE_API_URL=http://localhost:5000/api`
+2. Replace service functions in `database.js` with `fetch` calls:
+
+```js
+// Before (localStorage)
+getAll: () => getStore('food')
+
+// After (API)
+getAll: async () => {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/food`);
+  return res.json();
+}
+```
+
+3. Update components to handle the returned Promise (`async/await`)
+
+---
+
 ## Known Limitations
 
-- **Frontend uses localStorage** — data is per-browser and resets when `DB_VERSION` is bumped. The backend (MongoDB) is ready to connect but the frontend currently doesn't call it.
-- **No real authentication** — login is credential matching against seed data. JWT auth is scaffolded but not wired.
-- **Map is a visual placeholder** — live tracking shows a progress bar and route history. A real map (Leaflet.js) can be added without an API key.
+- **localStorage only** — data is per-browser and resets on `DB_VERSION` bump. MongoDB backend is ready but not yet called by the frontend.
+- **No real auth** — login matches credentials against seed data. JWT is scaffolded but not wired.
+- **Map is a placeholder** — live tracking shows a progress bar and route history. Leaflet.js can be added without an API key.
 
 ---
 
 ## Roadmap
 
-- [ ] Connect frontend to MongoDB backend (replace localStorage calls with fetch)
+- [ ] Connect frontend to MongoDB backend
 - [ ] JWT authentication for all roles
 - [ ] Leaflet.js map in live tracking modal
-- [ ] Email/SMS notifications to NGOs via Nodemailer / Twilio
+- [ ] Email/SMS notifications via Nodemailer / Twilio
 - [ ] Admin analytics page with charts
 - [ ] QR code scan for delivery confirmation
 - [ ] Mobile app (React Native)
 
 ---
 
-## Contributing
+## Difference from Previous Version
 
-```bash
-# Fork the repo, then:
-git checkout -b feature/your-feature
-git commit -m "add: your feature description"
-git push origin feature/your-feature
-# Open a Pull Request
-```
+| | [Previous (HTML/CSS/JS)](https://github.com/sakshi-walunjkar/Food-Waste-Management-System-) | This Version (React + Node) |
+|---|---|---|
+| Frontend | Plain HTML, CSS, JavaScript | React 18 + Vite 7 |
+| State | DOM manipulation | React `useState` + localStorage |
+| Roles | Basic | 4 roles with permission system |
+| Backend | None | Node.js + Express + MongoDB |
+| Food Entry | Single item | Batch (multiple items at once) |
+| Tracking | Static | Live progress + route history |
+| Notifications | None | In-app bell with mark-all-read |
 
 ---
 
