@@ -3,8 +3,6 @@
 
 A role-based web application that connects hostel mess kitchens with nearby NGOs — turning leftover food into meals for communities in need.
 
-> **Live Demo:** *(deploy link here)*
-> **Previous version (HTML/CSS/JS):** [Food-Waste-Management-System](https://github.com/sakshi-walunjkar/Food-Waste-Management-System-)
 
 ---
 
